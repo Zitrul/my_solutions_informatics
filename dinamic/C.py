@@ -1,15 +1,44 @@
-n, m = map(int, input().split())
-l = []
-for i in range(n):
-    l.append([0]*m)
-l[0][0] = 1
-for y in range(n):
-    for x in range(m):
-        #print(x, y)
-        if x - 1 >= 0 and y >= 2:
-            l[y][x] += l[y - 2][x - 1]
-        if y - 1 >= 0 and x >= 2:
-            l[y][x] += l[y - 1][x - 2]
 
-print(l[n-1][m-1])
-#print(l)
+s = 0
+n,m = map(int,input().split())
+used = []
+used_colors = []
+v = []
+for i in range(n):
+    used.append(0)
+    used_colors.append(0)
+    v.append([])
+for i in range(m):
+    a,b = map(int,input().split())
+    v[a-1].append(b-1)
+    v[b-1].append(a-1)
+#print(v)
+flag= 0
+def dfs(i, last):
+    global flag
+    used[i] = 1
+    if used_colors[last] == 1:
+        used_colors[i] = 2
+    else:
+        used_colors[i] = 1
+
+    for j in v[i]:
+        if used_colors[i] == used_colors[j]:
+            flag = 1
+        if used[j] != 1:
+            dfs(j, i)
+
+        #else:
+        #    flag = 1
+    return 0
+
+while sum(used) != n:
+    start = used.index(0)
+    used_colors[start] = 1
+    dfs(start, start)
+
+if flag == 0:
+    print("YES")
+else:
+    print("NO")
+#print(sum(used))
